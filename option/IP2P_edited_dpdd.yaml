@@ -1,0 +1,43 @@
+scheduler:
+  num_train_timesteps: 1000
+  beta_start: 0.00085
+  beta_end: 0.012
+  beta_schedule: 'scaled_linear'
+  prediction_type: 'epsilon'
+
+log_name: IP2P_edited
+
+
+Val:
+  val_datasets: '/hpc2hdd/home/hfeng108/FHX/DPDD_dataset/DPDD_Test/test'
+  val_bs: 8
+
+
+val_ckpt_path: 
+RESUME: False
+resume_checkpoint_path:
+updatelr: True
+freeze_dpt: False
+
+Trainer:
+  check_val_every_n_epoch: 5
+  accumulate_grad_batches: 1
+  max_steps: 1000000
+  accelerator: 'gpu'
+  devices: [0, 1]
+  precision: '16-mixed'
+  strategy:  'ddp_find_unused_parameters_true'
+  log_every_n_steps: 4
+  initlr: 0.0001
+  crop_size: 320
+  num_workers: 8
+  train_datasets: '/hpc2hdd/home/hfeng108/FHX/DPDD_dataset/train 1/train'
+  train_bs: 16
+
+Model:
+  checkpoint: "timbrooks/instruct-pix2pix"
+  conditioning_drop_rate: 0.05
+  guidance_scale: 7.0
+  image_guidance_scale: 1.5
+  num_test_timesteps: 20
+
